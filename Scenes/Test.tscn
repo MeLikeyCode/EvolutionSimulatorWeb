@@ -1,0 +1,32 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Scripts/Test.gd" type="Script" id=1]
+
+[node name="Control" type="Control"]
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+margin_left = 60.0
+margin_top = 40.0
+margin_right = 210.0
+margin_bottom = 230.0
+
+[node name="Panel" type="Panel" parent="ScrollContainer"]
+margin_right = 500.0
+margin_bottom = 500.0
+rect_min_size = Vector2( 500, 500 )
+
+[node name="Button" type="Button" parent="ScrollContainer/Panel"]
+margin_right = 12.0
+margin_bottom = 20.0
+text = "text"
+
+[node name="Button2" type="Button" parent="ScrollContainer/Panel"]
+margin_left = 200.0
+margin_top = 280.0
+margin_right = 237.0
+margin_bottom = 300.0
+text = "text"
