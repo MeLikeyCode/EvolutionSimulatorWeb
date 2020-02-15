@@ -166,12 +166,15 @@ func OnMoveTimerTimeout():
 # Executed when this creature collides with another.
 func OnCollisionWithCreature(otherCreature):
 	if typeof(otherCreature) == typeof(self):
+		print ("two creatures collided!")
 		var asCreature = otherCreature as Creature
-		if self.creature_mass != asCreature.mass:
-			var biggerCreature = self if self.creature_mass > asCreature.mass else asCreature
+		if self.creature_mass != asCreature.creature_mass:
+			print ("not the same mass")
+			var biggerCreature = self if self.creature_mass > asCreature.creature_mass else asCreature
 			var smallerCreature = asCreature if biggerCreature == self else self
-			biggerCreature.currentEnergy += smallerCreature.mass * 100
+			biggerCreature.currentEnergy += smallerCreature.creature_mass * 100
 			biggerCreature.numCreaturesEaten += 1;
+			print("deleting smaller creature")
 			self.DeleteCreature();
 
 # Removes the creature from the World and then QueueFrees it.
