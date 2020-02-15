@@ -159,8 +159,7 @@ func OnCreateCreatures(mass, radius, movementForceMag, number):
 		var randZ = rand_range(0, self.height);
 		var pos = Vector3(randX, 0, randZ);
 		creature.translation = pos;
-		creature.InitializeCreature(mass, radius, movementForceMag);
-		self.AddCreature(creature);
+		creature.InitializeCreature(mass, radius, movementForceMag,self);
 
 # executed when it is time to recalculate stats
 func OnCalculateStats():
@@ -244,13 +243,15 @@ func OnCreateSingleCreature(pos):
 	var creature = creatureGenerator.instance();
 
 	var createCreaturePanel = self.get_node("GUI").get_node("TabContainer/Creature/Panel/Panel2");
+	
 	var mass = float(createCreaturePanel.get_node("LineEdit").text)
 	var radius = float(createCreaturePanel.get_node("LineEdit2").text)
 	var movementForce = float(createCreaturePanel.get_node("LineEdit4").text)
+	
 	creature.translation = pos;
-	creature.InitializeCreature(mass, radius, movementForce);
+	
+	creature.InitializeCreature(mass, radius, movementForce,self);
 
-	self.AddCreature(creature);
 
 func GetCreaturesInRadius(position, radius):
 	var results = []
@@ -261,14 +262,8 @@ func GetCreaturesInRadius(position, radius):
 
 # Add a Creature to the World.
 func AddCreature(creature):
-	if not creature.initialized_:
-		print("ERROR: Creature must be initialized before being added to the World.");
-		self.get_tree().quit();
-
-	creature.world = self;
 	creatures.append(creature);
 	self.add_child(creature);
-
 	creature.connect("CreatureClicked", self, "OnCreatureClicked");
 
 # Remove a Creature from the World.

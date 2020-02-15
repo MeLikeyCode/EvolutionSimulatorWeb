@@ -8,7 +8,7 @@ const Utilities = preload("Utilities.gd")
 # Emitted when the Creature is clicked.
 signal CreatureClicked
 
-var world: World				# the world that the creature lives in
+var world				# the world that the creature lives in
 
 # main creature attributes
 var creature_mass: float		
@@ -42,10 +42,13 @@ func _process(delta):
 		self.DeleteCreature();
 
 # creature initialization function; must be called after a creature is created.
-func InitializeCreature(mass, radius, movementForceMag):
+func InitializeCreature(mass, radius, movementForceMag,world):
 	if self.initialized_:
 		print("ERROR: Creature is already initialized. Can only be initialized once.")
 		get_tree().quit()
+		
+	self.world = world
+	self.world.AddCreature(self)
 
 	# calculate/set physical properties
 	self.creature_mass = mass
@@ -99,7 +102,7 @@ func move_():
 			nearbyBiggerCreatures.append(creature)
 
 	# if there are nearby bigger creatures, face away from all of them
-	if nearbyBiggerCreatures.count() > 0:
+	if nearbyBiggerCreatures.size() > 0:
 		var creatureVectors = [] # a list of vectors, each going from this creature to a nearby big creature
 		for creature in nearbyBiggerCreatures:
 			var vector = self.translation - creature.translation
@@ -141,7 +144,7 @@ func OnReplicationTimerTimeout():
 		return;
 
 	# replicate
-	var creature = self.world.creatureGenerator.Instance()
+	var creature = self.world.creatureGenerator.instance()
 
 	var offset = self.get_node("CollisionShape").shape.extents.x
 	creature.translation = self.translation + Vector3(offset * 3, 0, 0)
@@ -149,12 +152,12 @@ func OnReplicationTimerTimeout():
 	var childMass = Utilities.RandomizeValue(self.creature_mass, 10)
 	var childRadius = Utilities.RandomizeValue(self.radius, 10)
 	var childMoveForceMag = Utilities.RandomizeValue(self.movementForceMag, 10);
-	creature.InitializeCreature(childMass, childRadius, childMoveForceMag);
+	
+	creature.InitializeCreature(childMass, childRadius, childMoveForceMag,self.world);
 
 	self.currentEnergy -= costForBaby;
 	self.numChildrenSpanwed += 1;
 
-	self.world.AddCreature(creature);
 	
 
 func OnMoveTimerTimeout():

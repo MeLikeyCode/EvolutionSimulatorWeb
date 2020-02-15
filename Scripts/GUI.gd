@@ -107,7 +107,7 @@ func OnUpdateFoodSpawnRatePressed():
 # Executed when the time scale slider changes; will emit relavant signal.
 func OnTimeSliderValueChanged(value):
 	var timeScaleLabel = self.get_node("TabContainer/World/Panel/Panel2/Label2")
-	timeScaleLabel.text = value.to_string() + "x";
+	timeScaleLabel.text = str(value) + "x";
 	self.emit_signal("SetTimeScale",value)
 
 # Executed when the update bounds button has been pressed; will emit relavant signal.
